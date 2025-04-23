@@ -25,7 +25,15 @@ def search():
 
 def loadpage(page):
     def loading():
-        print(page)
+        portfolio_button.button.configure(background="#2F2A2A")
+        trade_button.button.configure(background="#2F2A2A")
+        research_button.button.configure(background="#2F2A2A")
+        if page == "Portfolio":
+            portfolio_button.button.configure(background="#484242")
+        if page == "Trade":
+            trade_button.button.configure(background="#484242")
+        if page == "Research":
+            research_button.button.configure(background="#484242")
     return loading
 
 window = tk.Tk()
@@ -76,6 +84,9 @@ trade_button.button.pack(side="left",padx="10px")
 
 research_button = PageButton(Page_frame, "Research")
 research_button.button.pack(side="left",padx="10px")
+
+active_tab = "Portfolio"
+portfolio_button.button.configure(background="#484242")
 
 input_frame = ttk.Frame(master=window)
 
