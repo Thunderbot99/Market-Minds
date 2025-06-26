@@ -1,3 +1,4 @@
+import json
 import tkinter as tk
 from tkinter import ttk
 import yfinance as yf
@@ -5,6 +6,7 @@ import yfinance as yf
 buttons = []
 pagers = {}
 windowing = 0
+dating = 0
 class PageButton:
     def __init__(self, master, text):
         self.text = text
@@ -27,13 +29,6 @@ class PageButton:
         buttons.append(self.button)
 
 
-def search():
-    searched = yf.Search(query=entryStr.get()).quotes[0]
-    print(searched)
-    stocks = yf.Ticker(searched['symbol'])
-    output_label.config(text=f"{searched['shortname']}: {stocks.fast_info['lastPrice']}")
-
-
 def loadpage(thisbutton):
     def loading():
         global buttons
@@ -42,9 +37,12 @@ def loadpage(thisbutton):
         thisbutton.button.configure(background="#484242")
         global pagers
         for i in pagers:
-            pagers[i].root.pack_forget()
-        global windowing
-        pagers[thisbutton.text].__init__(windowing)
+            pagers[i].root.destroy()
+        global windowing, dating
+        if thisbutton.text == "Time":
+            pagers[thisbutton.text].__init__(windowing, dating)
+        else:
+            pagers[thisbutton.text].__init__(windowing)
     return loading
 
 
@@ -77,13 +75,15 @@ def pack(window, pages):
         font="Calibri 40 bold")
     title_label_minds.pack(side="left")
 
-    Balance = ttk.Label(
+    with open("save.json") as f:
+        data = json.load(f)
+    Date = tk.Label(
         master=title_frame,
-        text="₱100,000",
+        text=f"{data['Date']['Day']}-{data['Date']['Month']}-{data['Date']['Year']}",
         foreground="#FFFFFF",
         background="#2F2A2A",
         font="Calibri 40")
-    Balance.pack(side="right", anchor="ne")
+    Date.pack(side="right", anchor="ne")
 
     Page_frame = tk.Frame(master=window, background="#2F2A2A")
     Page_frame.pack(anchor="nw", fill="x")
@@ -94,32 +94,14 @@ def pack(window, pages):
     trade_button = PageButton(Page_frame, "Trade");
     trade_button.button.pack(side="left", padx="10px")
 
-    research_button = PageButton(Page_frame, "Research")
-    research_button.button.pack(side="left", padx="10px")
+    time_button = PageButton(Page_frame, "Time")
+    time_button.button.pack(side="left", padx="10px")
+
+    bank_button = PageButton(Page_frame, "Bank")
+    bank_button.button.pack(side="left", padx="10px")
 
     portfolio_button.button.configure(background="#484242")
-
-    #input_frame = ttk.Frame(master=window)
-    #entryStr = tk.StringVar()
-    #entry = ttk.Entry(
-    #    master=input_frame,
-    #    textvariable=entryStr)
-
-    #button = ttk.Button(
-    #    master=input_frame,
-    #    text="Convert",
-    #    command=search)
-
-    #input_frame.pack(pady=10)
-    #entry.pack(
-    #    side="left",
-    #    padx=10)
-    #button.pack()
-
-    #output_label = ttk.Label(
-    #    master=window,
-    #    text="Output",
-    #    font="Calibri 24")
-
-    #output_label.pack(pady=5)
+    global dating
+    dating = Date
+    return Date
 

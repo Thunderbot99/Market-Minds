@@ -1,0 +1,18 @@
+{
+   "Bank": 40499.04057427256,
+   "Holding": {
+      "AYAAY": [
+         "Ayala Land, Inc.",
+         30
+      ],
+      "JBFCY": [
+         "Jollibee Foods Corporation",
+         17
+      ]
+   },
+   "Date": {
+      "Day": 10,
+      "Month": "05",
+      "Year": "2025"
+   }
+}
